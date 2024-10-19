@@ -3,6 +3,7 @@ pub mod helpers;
 
 use crate::helpers::{Axis, Coordinate};
 use anyhow::{Ok, Result};
+use helpers::Offset;
 
 #[derive(Clone)]
 pub struct Field<T> {
@@ -266,6 +267,16 @@ impl<T> Field<T> {
                     .map(move |(column, _)| Coordinate { row, column })
             })
             .collect()
+    }
+
+    pub fn kernel_iter<'a>(
+        &'a self,
+        coord: Coordinate,
+        offsets: &'a [Offset],
+    ) -> impl Iterator<Item = &'a T> + 'a {
+        offsets
+            .iter()
+            .filter_map(move |&off| self.get_value((coord + off)?))
     }
 
     pub fn debug_print(&self)
