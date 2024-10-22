@@ -160,6 +160,13 @@ impl<T> Field<T> {
         self.get_grid().iter().flat_map(|line| line.iter())
     }
 
+    pub fn value_iter_mut<'a>(&'a mut self) -> impl Iterator<Item = &'a mut T>
+    where
+        T: 'a,
+    {
+        self.data.iter_mut().flat_map(|line| line.iter_mut())
+    }
+
     // Transformations //
 
     pub fn transform_all<F, R>(&self, transform: F) -> Field<R>
