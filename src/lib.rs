@@ -24,10 +24,12 @@ impl<T> Field<T> {
 
     pub fn new_default(width: usize, height: usize) -> Self
     where
-        T: Clone + Default,
+        T: Default,
     {
         Self {
-            data: vec![vec![T::default(); width]; height],
+            data: (0..height)
+                .map(|_| (0..width).map(|_| T::default()).collect())
+                .collect(),
         }
     }
 
