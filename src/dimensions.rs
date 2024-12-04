@@ -16,6 +16,13 @@ impl<T> Field<T> {
         }
     }
 
+    pub fn all_coordinates(&self) -> impl Iterator<Item = Coordinate> + '_ {
+        let height = self.height();
+        let width = self.width();
+
+        (0..height).flat_map(move |row| (0..width).map(move |column| Coordinate { row, column }))
+    }
+
     // Line start coordinates
 
     pub(super) fn line_start_coordinates(
