@@ -69,19 +69,6 @@ impl<T> Field<T> {
             .iter()
             .filter_map(move |&off| self.get_value((coord + off)?))
     }
-
-    pub fn debug_print(&self)
-    where
-        T: std::fmt::Debug,
-    {
-        println!("Debug Printing:");
-        for line in self.get_grid() {
-            for val in line {
-                print!("[{:?}]", val)
-            }
-            println!();
-        }
-    }
 }
 
 impl<T> std::fmt::Debug for Field<T>
