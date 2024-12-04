@@ -1,8 +1,21 @@
-#![allow(dead_code)]
+#[derive(Clone, Copy, Debug)]
+pub enum Direction {
+    Horizontal,   // Left to right
+    Vertical,     // Top to bottom
+    Diagonal,     // Top-left to bottom-right
+    AntiDiagonal, // Top-right to bottom-left
+}
 
-/*
-* A collection of tiny helper enums.
-*/
+impl Direction {
+    pub fn opposite(&self) -> Self {
+        match self {
+            Direction::Horizontal => Direction::Vertical,
+            Direction::Vertical => Direction::Horizontal,
+            Direction::Diagonal => Direction::AntiDiagonal,
+            Direction::AntiDiagonal => Direction::Diagonal,
+        }
+    }
+}
 
 #[derive(Clone, Copy, Debug)]
 pub enum Axis {
@@ -19,7 +32,7 @@ impl Axis {
     }
 }
 
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, Debug)]
 pub struct Coordinate {
     pub row: usize,
     pub column: usize,
@@ -37,6 +50,23 @@ impl Coordinate {
             Axis::Row => self.row = index,
             Axis::Column => self.column = index,
         }
+    }
+    pub fn line_in_direction(
+        self,
+        direction: Direction,
+        width: usize,
+        height: usize,
+    ) -> impl Iterator<Item = Coordinate> {
+        let offset = Offset::from_direction(direction);
+        let mut maybe_next = Some(self);
+        std::iter::from_fn(move || {
+            let valid = maybe_next?;
+            if valid.row >= height || valid.column >= width {
+                return None;
+            }
+            maybe_next = valid + offset;
+            Some(valid)
+        })
     }
 }
 
@@ -86,21 +116,27 @@ impl Offset {
             Axis::Column => self.column = index,
         }
     }
+    pub fn from_direction(direction: Direction) -> Self {
+        match direction {
+            Direction::Horizontal => Offset { row: 0, column: 1 },
+            Direction::Vertical => Offset { row: 1, column: 0 },
+            Direction::Diagonal => Offset { row: 1, column: 1 },
+            Direction::AntiDiagonal => Offset { row: 1, column: -1 },
+        }
+    }
 
-    pub fn square_kernel(radius: usize, include_center: bool) -> Vec<Offset> {
+    pub fn square_kernel(radius: usize, include_center: bool) -> impl Iterator<Item = Offset> {
         let radius = radius as isize;
 
-        (-radius..=radius)
-            .flat_map(|row| {
-                (-radius..=radius).filter_map(move |column| {
-                    if row == 0 && column == 0 && !include_center {
-                        None
-                    } else {
-                        Some(Offset { row, column })
-                    }
-                })
+        (-radius..=radius).flat_map(move |row| {
+            (-radius..=radius).filter_map(move |column| {
+                if row == 0 && column == 0 && !include_center {
+                    None
+                } else {
+                    Some(Offset { row, column })
+                }
             })
-            .collect()
+        })
     }
 }
 
