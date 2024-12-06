@@ -8,7 +8,7 @@ mod dimensions;
 mod lines;
 mod transform;
 
-pub use crate::helpers::{Coordinate, Direction, Offset};
+pub use crate::helpers::{Axis, Coordinate, Direction, Offset};
 
 #[derive(Clone)]
 pub struct Field<T> {

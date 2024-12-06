@@ -15,6 +15,21 @@ impl Direction {
             Direction::AntiDiagonal => Direction::Diagonal,
         }
     }
+
+    pub fn is_axial(&self) -> bool {
+        match self {
+            Direction::Horizontal | Direction::Vertical => true,
+            Direction::Diagonal | Direction::AntiDiagonal => false,
+        }
+    }
+
+    pub fn axis(&self) -> Option<Axis> {
+        match self {
+            Direction::Horizontal => Some(Axis::Row),
+            Direction::Vertical => Some(Axis::Column),
+            Direction::Diagonal | Direction::AntiDiagonal => None,
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -28,6 +43,13 @@ impl Axis {
         match self {
             Axis::Row => Axis::Column,
             Axis::Column => Axis::Row,
+        }
+    }
+
+    pub fn direction(&self) -> Direction {
+        match self {
+            Axis::Row => Direction::Horizontal,
+            Axis::Column => Direction::Vertical,
         }
     }
 }
