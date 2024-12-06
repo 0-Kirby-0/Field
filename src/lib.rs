@@ -60,6 +60,16 @@ impl<T> Field<T> {
             .collect()
     }
 
+    pub fn count_if<P>(&self, predicate: P) -> usize
+    where
+        P: Fn(&T) -> bool,
+    {
+        self.get_grid()
+            .iter()
+            .map(|line| line.iter().filter(|val| predicate(val)).count())
+            .sum()
+    }
+
     pub fn kernel_iter<'a>(
         &'a self,
         coord: Coordinate,
