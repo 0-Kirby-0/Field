@@ -1,4 +1,4 @@
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Hash, Eq, PartialEq)]
 pub enum Direction {
     Horizontal,   // Left to right
     Vertical,     // Top to bottom
@@ -32,7 +32,7 @@ impl Direction {
     }
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Hash, Eq, PartialEq)]
 pub enum Axis {
     Row,
     Column,
@@ -54,7 +54,7 @@ impl Axis {
     }
 }
 
-#[derive(Clone, Copy, Default, Eq, PartialEq, Debug)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, Debug, Hash)]
 pub struct Coordinate {
     pub row: usize,
     pub column: usize,
@@ -119,7 +119,7 @@ impl std::ops::Add<Offset> for Coordinate {
     }
 }
 
-#[derive(Clone, Copy, Default, Debug)]
+#[derive(Clone, Copy, Default, Debug, Hash, Eq, PartialEq)]
 pub struct Offset {
     pub row: isize,
     pub column: isize,
