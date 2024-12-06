@@ -7,7 +7,7 @@ pub enum Direction {
 }
 
 impl Direction {
-    pub fn opposite(&self) -> Self {
+    pub const fn opposite(&self) -> Self {
         match self {
             Direction::Horizontal => Direction::Vertical,
             Direction::Vertical => Direction::Horizontal,
@@ -16,14 +16,14 @@ impl Direction {
         }
     }
 
-    pub fn is_axial(&self) -> bool {
+    pub const fn is_axial(&self) -> bool {
         match self {
             Direction::Horizontal | Direction::Vertical => true,
             Direction::Diagonal | Direction::AntiDiagonal => false,
         }
     }
 
-    pub fn axis(&self) -> Option<Axis> {
+    pub const fn axis(&self) -> Option<Axis> {
         match self {
             Direction::Horizontal => Some(Axis::Row),
             Direction::Vertical => Some(Axis::Column),
@@ -39,14 +39,14 @@ pub enum Axis {
 }
 
 impl Axis {
-    pub fn opposite(&self) -> Self {
+    pub const fn opposite(&self) -> Self {
         match self {
             Axis::Row => Axis::Column,
             Axis::Column => Axis::Row,
         }
     }
 
-    pub fn direction(&self) -> Direction {
+    pub const fn direction(&self) -> Direction {
         match self {
             Axis::Row => Direction::Horizontal,
             Axis::Column => Direction::Vertical,
@@ -61,13 +61,13 @@ pub struct Coordinate {
 }
 
 impl Coordinate {
-    pub fn get_axis_index(self, axis: Axis) -> usize {
+    pub const fn get_axis_index(self, axis: Axis) -> usize {
         match axis {
             Axis::Row => self.row,
             Axis::Column => self.column,
         }
     }
-    pub fn set_axis_index(&mut self, axis: Axis, index: usize) {
+    pub const fn set_axis_index(&mut self, axis: Axis, index: usize) {
         match axis {
             Axis::Row => self.row = index,
             Axis::Column => self.column = index,
@@ -126,19 +126,19 @@ pub struct Offset {
 }
 
 impl Offset {
-    pub fn get_axis_index(self, axis: Axis) -> isize {
+    pub const fn get_axis_index(self, axis: Axis) -> isize {
         match axis {
             Axis::Row => self.row,
             Axis::Column => self.column,
         }
     }
-    pub fn set_axis_index(&mut self, axis: Axis, index: isize) {
+    pub const fn set_axis_index(&mut self, axis: Axis, index: isize) {
         match axis {
             Axis::Row => self.row = index,
             Axis::Column => self.column = index,
         }
     }
-    pub fn from_direction(direction: Direction) -> Self {
+    pub const fn from_direction(direction: Direction) -> Self {
         match direction {
             Direction::Horizontal => Offset { row: 0, column: 1 },
             Direction::Vertical => Offset { row: 1, column: 0 },
